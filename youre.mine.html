@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Will You Be My Girlfriend?</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f7c1e0, #d0b3ff);
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .card {
+      background: white;
+      padding: 2em;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      max-width: 90%;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #d63384;
+      margin-bottom: 1.5em;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 0.8em 2em;
+      border: none;
+      border-radius: 30px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .yes {
+      background-color: #ff6bcb;
+      color: white;
+    }
+
+    .yes:hover {
+      background-color: #ff3ba7;
+    }
+
+    .no {
+      background-color: #cccccc;
+      color: black;
+      position: absolute;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 6s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        bottom: -20px;
+        opacity: 0;
+        transform: translateX(0) rotate(45deg);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        bottom: 100%;
+        transform: translateX(50px) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    #confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+
+      button {
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Will you be my girlfriend? ❤️</h1>
+      <div class="buttons">
+        <button class="yes" onclick="celebrate()">Yes 💘</button>
+        <button class="no" id="noBtn">No 😢</button>
+      </div>
+    </div>
+    <div id="confetti"></div>
+  </div>
+
+  <script>
+    // No button moves randomly
+    const noBtn = document.getElementById('noBtn');
+    noBtn.addEventListener('mouseover', () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 100);
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    });
+
+    // Heart ambiance
+    function createHearts() {
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.bottom = "-30px";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        document.body.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    // Confetti celebration
+    function celebrate() {
+      const duration = 3 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+      const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+      const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        confetti({
+          particleCount: 50,
+          origin: {
+            x: Math.random(),
+            y: Math.random() - 0.2
+          }
+        });
+      }, 250);
+      alert("Yaaay! 💖 You're mine now 😍");
+    }
+
+    // Load confetti script
+    const confettiScript = document.createElement('script');
+    confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js';
+    document.body.appendChild(confettiScript);
+  </script>
+</body>
+</html>
